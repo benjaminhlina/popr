@@ -41,3 +41,19 @@ an. <- function(x) {
     upper
   )
 }
+
+#' Index functions
+#'
+#' Provides an index number.
+#'
+#' @param x an object to get a index
+#' @name index_functions
+#' @keywords internal
+
+.valid_idx <- function(x) {
+  vals <- if (inherits(x, "SpatRaster")) terra::values(x)[, 1] else as.vector(x)
+  idx_na <- which(is.na(vals))
+  idx <- seq_along(vals)
+  idx[!idx %in% idx_na]
+  return(idx)
+}
