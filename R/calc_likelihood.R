@@ -28,22 +28,23 @@ calc_likdepth_transmit <- function(
 
   options(warn = 0)
   # t0 <- round(Sys.time())
-  check_start(x = "Depth")
+  msg_start(x = "Depth")
 
+  msg_dates(df = pdt)
   #--------------------------
   # data recorded by the tag
   # pre process the summary table
-  pdt$Date <- lubridate::parse_date_time(ac(pdt$day), "%Y-%m-%d")
-  # in case of lubridate failure # pdt$Date=as.POSIXct(ac(pdt$day), format="%Y-%m-%d")
-  dateVec <- pdt$Date
-  T <- length(dateVec)
+  # pdt$Date <- lubridate::parse_date_time(ac(pdt$day), "%Y-%m-%d")
+  # # in case of lubridate failure # pdt$Date=as.POSIXct(ac(pdt$day), format="%Y-%m-%d")
+  # dateVec <- pdt$Date
+  # T <- length(dateVec)
 
-  print(paste0(
-    "Generating profile likelihood for ",
-    ac(dateVec)[1],
-    " through ",
-    ac(dateVec)[length(dateVec)]
-  ))
+  # print(paste0(
+  #   "Generating profile likelihood for ",
+  #   ac(dateVec)[1],
+  #   " through ",
+  #   ac(dateVec)[length(dateVec)]
+  # ))
 
   #--------------------------
   # load env data CTD
