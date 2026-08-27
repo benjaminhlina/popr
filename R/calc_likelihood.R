@@ -20,66 +20,19 @@ calc_likdepth_transmit <- function(
   pdt,
   bathy = NULL,
   ncores = 4,
-  weighted = FALSE, # nb cores in the parallel cluster 4 default value #
-  focal_dim = 9,
   daily_sd_depth = 0.57
 ) {
   # ctd.dir="C:/Users/pgatti/Documents/halibut/R/Data_PGalbraith/toBeLoaded/";ncores=4;weighted=FALSE; focalDim = 3;daily.sd.depth=.57; pdt=sm$sm;depth.list=depth.mix
+
+  error_df(pdt)
+  error_spatrast(bathy)
+  error_numeric(ncores)
 
   options(warn = 0)
   # t0 <- round(Sys.time())
   msg_start(x = "Depth")
 
   msg_dates(df = pdt)
-  #--------------------------
-  # data recorded by the tag
-  # pre process the summary table
-  # pdt$Date <- lubridate::parse_date_time(ac(pdt$day), "%Y-%m-%d")
-  # # in case of lubridate failure # pdt$Date=as.POSIXct(ac(pdt$day), format="%Y-%m-%d")
-  # dateVec <- pdt$Date
-  # T <- length(dateVec)
-
-  # print(paste0(
-  #   "Generating profile likelihood for ",
-  #   ac(dateVec)[1],
-  #   " through ",
-  #   ac(dateVec)[length(dateVec)]
-  # ))
-
-  #--------------------------
-  # load env data CTD
-  # load(paste0(ctd.dir,"bathy.mat.13_18.RData"))
-  load(bathy)
-  zbi <- db
-  rm(db)
-  indNA <- which(is.na(zbi))
-  inds <- 1:length(zbi)
-  inds <- inds[!inds %in% indNA]
-
-  #---------------------
-  # compute arrays of standard deviation of bathymetry
-  if (weighted) {
-    print('!! only pre-computed matrix is for focaldim=3, 5 or 9')
-    load(paste0(ctd.dir, 'sdcell.n', focalDim, '.weighted.RData'))
-    sdi <- sdcell
-    rm(sdcell)
-  } else {
-    sd <- raster::focal(
-      raster::raster(zbi),
-      w = matrix(1, nrow = focalDim, ncol = focalDim),
-      fun = function(x) sd(x, na.rm = TRUE)
-    )
-    sdi <- raster::as.array(sd)
-    # fill sd at 0
-    ssd <- as.vector(sdi)
-    fill.sd0 <- quantile(ssd[ssd != 0], na.rm = TRUE, probs = .01)
-    if (is.na(fill.sd0)) {
-      fill.sd0 <- 1e-3
-    } # cas de force majeure
-    sdi[sdi == 0] <- fill.sd0
-    sdi[is.na(sdi)] <- fill.sd0
-    sdi <- sdi[,, 1]
-  }
 
   #---------------------------------------------------------------------
   # start of heavy daily loop
@@ -113,7 +66,8 @@ calc_likdepth_transmit <- function(
         # indexes
 
         # lik gauss
-        lik <- likint3.sub(
+        likint3_matrix()
+        lik <- likint3_matrix(
           w = cbind(
             as.vector(zbi),
             as.vector(sdi) + daily.sd.depth,

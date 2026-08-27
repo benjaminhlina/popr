@@ -4,14 +4,7 @@
 \alias{calc_likdepth_transmit}
 \title{Calculate Likelihood Functions}
 \usage{
-calc_likdepth_transmit(
-  pdt,
-  bathy = NULL,
-  ncores = 4,
-  weighted = FALSE,
-  focal_dim = 9,
-  daily_sd_depth = 0.57
-)
+calc_likdepth_transmit(pdt, bathy = NULL, ncores = 4, daily_sd_depth = 0.57)
 }
 \arguments{
 \item{pdt}{a \code{data.frame} containing psat depth data for a single transmitter}
@@ -21,11 +14,11 @@ calc_likdepth_transmit(
 \item{ncores}{a \code{numeric} that dictates the number of cores used.
 description}
 
+\item{daily_sd_depth}{a numeric value}
+
 \item{weighted}{a \code{logical} value that dictates whether the model weights predictions}
 
 \item{focal_dim}{a \code{numeric} do not know what this does}
-
-\item{daily_sd_depth}{a numeric value}
 }
 \description{
 These are functions that will calculated the likelihood
