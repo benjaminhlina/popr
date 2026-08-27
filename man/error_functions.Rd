@@ -2,24 +2,41 @@
 % Please edit documentation in R/error_functions.R
 \name{error_functions}
 \alias{error_functions}
+\alias{error_df}
 \alias{error_empty_file}
 \alias{error_load}
+\alias{error_numeric}
 \alias{error_path}
 \alias{error_raster}
+\alias{error_spatrast}
 \title{Error functions}
 \usage{
+error_df(df, arg_name = NULL)
+
 error_empty_file(path)
 
 error_load(path)
 
+error_numeric(num, arg_name = NULL)
+
 error_path(path)
 
 error_raster(raster)
+
+error_spatrast(spatrast, arg_name = NULL)
 }
 \arguments{
+\item{df}{a \code{data.frame}}
+
+\item{arg_name}{The name of the argument}
+
 \item{path}{The file path to a file.}
 
 \item{raster}{a raster object to assess}
+
+\item{spatrast}{a raster object to assess}
+
+\item{vec}{a \code{vector} to check if numeric}
 }
 \description{
 These functions produce error message displayed to the user.

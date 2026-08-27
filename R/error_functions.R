@@ -2,6 +2,28 @@
 #'
 #' These functions produce error message displayed to the user.
 #'
+#'
+#' @param df a `data.frame`
+#' @param arg_name The name of the argument
+#'
+#' @name error_functions
+#' @keywords internal
+
+error_df <- function(df, arg_name = NULL) {
+  if (is.null(arg_name)) {
+    arg_name <- rlang::as_label(rlang::enexpr(df))
+  }
+  if (!(inherits(df, "data.frame"))) {
+    cli::cli_abort(
+      c(
+        "{arg_name} is not {.class data.frame}",
+        "x" = "Please provide {arg_name} with a {.class data.frame}"
+      )
+    )
+  }
+}
+
+#'
 #' @param path The file path to a file.
 #'
 #' @name error_functions
@@ -15,6 +37,7 @@ error_empty_file <- function(path) {
     ),
   )
 }
+
 #' @name error_functions
 #' @keywords internal
 error_load <- function(path) {
@@ -27,6 +50,21 @@ error_load <- function(path) {
     ),
     class = "bathy_rast_read_failed"
   )
+}
+
+#' @param vec a `vector` to check if numeric
+#' @name error_functions
+#' @keywords internal
+
+error_numeric <- function(num, arg_name = NULL) {
+  if (!(inherits(num, "numeric"))) {
+    cli::cli_abort(
+      c(
+        "{arg_name} needs to be a numeric.",
+        "x" = "Please supply {arg_name} is a {.class {numeric}}"
+      )
+    )
+  }
 }
 
 #' @name error_functions
@@ -57,4 +95,23 @@ error_raster <- function(raster) {
     ),
     class = "bathy_invalid_input"
   )
+}
+
+#' @param spatrast a raster object to assess
+#' @name error_functions
+#' @keywords internal
+
+error_spatrast <- function(spatrast, arg_name = NULL) {
+  if (is.null(arg_name)) {
+    arg_name <- rlang::as_label(rlang::enexpr(df))
+  }
+
+  if (!(inherits(spatrast, "SpatRaster"))) {
+    cli::cli_abort(
+      c(
+        "{arg_name} is not {.class SpatRaster}",
+        "x" = "Please provide {arg_name} with a {.class SpatRaster}"
+      )
+    )
+  }
 }
