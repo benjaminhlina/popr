@@ -2,6 +2,7 @@
 
 export(calc_likdepth_transmit)
 export(load_bathy_raster)
+export(mask_k)
 import(doParallel)
 import(foreach)
 import(parallel)

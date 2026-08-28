@@ -1,4 +1,4 @@
-Package: hmmr
+Package: popr
 Title: Provides Hidden Markoven Models for psat data 
 Version: 0.1.0
 Authors@R: 
