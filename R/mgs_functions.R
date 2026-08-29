@@ -30,7 +30,10 @@ msg_bathy <- function(bathy) {
   }
 
   if (is.character(bathy)) {
-    if (grepl("\\.RData$", bathy, ignore.case = TRUE)) {
+    if (
+      grepl("\\.RData$", bathy, ignore.case = TRUE) ||
+        grepl("\\.rds$", bathy, ignore.case = TRUE)
+    ) {
       cli::cli_inform(
         "{.arg bathy} detected as a file path: {.file {bathy}}"
       )
@@ -54,7 +57,7 @@ msg_dates <- function(df) {
 #' @name msg_function
 #' @keywords internal
 
-msg_load <- function(path) {
+msg_load_raster <- function(path) {
   cli::cli_inform(
     "{.arg path} detected as a file path: {.file {path}}. Attempting to read with {.fn terra::rast}."
   )

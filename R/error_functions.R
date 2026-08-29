@@ -23,9 +23,8 @@ error_df <- function(df, arg_name = NULL) {
   }
 }
 
-#'
+
 #' @param path The file path to a file.
-#'
 #' @name error_functions
 #' @keywords internal
 
@@ -37,6 +36,34 @@ error_empty_file <- function(path) {
     ),
   )
 }
+
+#' @param obj an object either `vector` or `matrix`
+#' @name error_functions
+#' @keywords internal
+error_focal_dim <- function(obj, arg_name = NULL) {
+  if (is.null(arg_name)) {
+    arg_name <- rlang::as_label(rlang::enexpr(obj))
+  }
+
+  if (inherits(obj, "matrix")) {
+    if (!is.numeric(obj)) {
+      error_numeric(obj)
+    }
+    error_matrix(obj)
+  } else {
+    error_numeric(obj)
+    if (any(obj %% 2 == 0)) {
+      cli::cli_abort(
+        c(
+          "Supplied value in {arg_name} has to be odd",
+          "x" = "You supplied: {.val {obj}}"
+        )
+      )
+    }
+  }
+}
+# else if (!(inherits(obj, "matrix"))) {}
+# }
 
 #' @name error_functions
 #' @keywords internal
@@ -55,13 +82,53 @@ error_load <- function(path) {
 #' @param vec a `vector` to check if numeric
 #' @name error_functions
 #' @keywords internal
+error_logical <- function(vec, arg_name = NULL) {
+  if (is.null(arg_name)) {
+    arg_name <- rlang::as_label(rlang::enexpr(vec))
+  }
 
-error_numeric <- function(num, arg_name = NULL) {
-  if (!(inherits(num, "numeric"))) {
+  if (!(inherits(vec, "logical"))) {
     cli::cli_abort(
       c(
-        "{arg_name} needs to be a numeric.",
-        "x" = "Please supply {arg_name} is a {.class {numeric}}"
+        "{arg_name} needs to be a logical value",
+        "x" = "Please supply {arg_name} as a {.cls logic}"
+      )
+    )
+  }
+}
+#' @param matrix a `matrix` to check if valid
+#' @name error_functions
+#' @keywords internal
+
+error_matrix <- function(matrix, arg_name = NULL) {
+  if (is.null(arg_name)) {
+    arg_name <- rlang::as_label(rlang::enexpr(matrix))
+  }
+  dims <- dim(matrix)
+
+  if (any(dims %% 2 == 0)) {
+    cli::cli_abort(
+      c(
+        "Supplied matrix in {arg_name} must have odd dimensions",
+        "x" = "You supplied a matrix with dimensions: {.val {dims[1]}} x {.val {dims[2]}}"
+      )
+    )
+  }
+}
+
+#' @name error_functions
+#' @keywords internal
+
+error_numeric <- function(vec, arg_name = NULL) {
+  if (is.null(arg_name)) {
+    arg_name <- rlang::as_label(rlang::enexpr(vec))
+  }
+
+  if (!(inherits(vec, "numeric"))) {
+    cli::cli_abort(
+      c(
+        "{arg_name} needs to be a numeric",
+        "x" = "Please supply {arg_name} as a {.cls numeric}"
       )
     )
   }

@@ -4,7 +4,10 @@
 \alias{error_functions}
 \alias{error_df}
 \alias{error_empty_file}
+\alias{error_focal_dim}
 \alias{error_load}
+\alias{error_logical}
+\alias{error_matrix}
 \alias{error_numeric}
 \alias{error_path}
 \alias{error_raster}
@@ -15,9 +18,15 @@ error_df(df, arg_name = NULL)
 
 error_empty_file(path)
 
+error_focal_dim(obj, arg_name = NULL)
+
 error_load(path)
 
-error_numeric(num, arg_name = NULL)
+error_logical(vec, arg_name = NULL)
+
+error_matrix(matrix, arg_name = NULL)
+
+error_numeric(vec, arg_name = NULL)
 
 error_path(path)
 
@@ -32,11 +41,15 @@ error_spatrast(spatrast, arg_name = NULL)
 
 \item{path}{The file path to a file.}
 
+\item{obj}{an object either \code{vector} or \code{matrix}}
+
+\item{vec}{a \code{vector} to check if numeric}
+
+\item{matrix}{a \code{matrix} to check if valid}
+
 \item{raster}{a raster object to assess}
 
 \item{spatrast}{a raster object to assess}
-
-\item{vec}{a \code{vector} to check if numeric}
 }
 \description{
 These functions produce error message displayed to the user.

@@ -57,3 +57,12 @@ an. <- function(x) {
   idx[!idx %in% idx_na]
   return(idx)
 }
+
+#' @name index_functions
+#' @keywords internal
+
+.valid_idx_na <- function(x) {
+  vals <- if (inherits(x, "SpatRaster")) terra::values(x)[, 1] else as.vector(x)
+  idx_na <- which(is.na(vals))
+  return(idx_na)
+}

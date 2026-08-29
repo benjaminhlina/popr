@@ -4,7 +4,7 @@
 \alias{msg_function}
 \alias{msg_bathy}
 \alias{msg_dates}
-\alias{msg_load}
+\alias{msg_load_raster}
 \alias{msg_load_rdata}
 \alias{msg_start}
 \title{Message functions}
@@ -13,7 +13,7 @@ msg_bathy(bathy)
 
 msg_dates(df)
 
-msg_load(path)
+msg_load_raster(path)
 
 msg_load_rdata(obj, obj_name)
 

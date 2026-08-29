@@ -3,9 +3,12 @@
 \name{index_functions}
 \alias{index_functions}
 \alias{.valid_idx}
+\alias{.valid_idx_na}
 \title{Index functions}
 \usage{
 .valid_idx(x)
+
+.valid_idx_na(x)
 }
 \arguments{
 \item{x}{an object to get a index}
