@@ -45,3 +45,16 @@ load(
   "/Users/benhlina/Library/CloudStorage/Dropbox/Dal-Post Doc/data/Geolocation for Jena/bathy_grid/bathy.mat.gsl.ssgb.lon72.41.lat41.52.RData"
 )
 db
+
+bathy <- load_bathy_raster(
+  "/Users/benhlina/Library/CloudStorage/Dropbox/Dal-Post Doc/data/Geolocation for Jena/bathy_grid/bathy.mat.gsl.ssgb.lon72.41.lat41.52.rds"
+)
+
+load(
+  "/Users/benhlina/Library/CloudStorage/Dropbox/Dal-Post Doc/data/Geolocation for Jena/bathy_grid/bathy.mat.gsl.ssgb.lon72.41.lat41.52.rds"
+)
+
+readr::write_rds(
+  db,
+  "/Users/benhlina/Library/CloudStorage/Dropbox/Dal-Post Doc/data/Geolocation for Jena/bathy_grid/bathy.mat.gsl.ssgb.lon72.41.lat41.52.rds"
+)
