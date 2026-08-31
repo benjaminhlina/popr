@@ -17,7 +17,7 @@ msg_load_raster(path)
 
 msg_load_rdata(obj, obj_name)
 
-msg_start(chr, type, t0 = round(Sys.time()))
+msg_start(chr, t0 = round(Sys.time()))
 }
 \arguments{
 \item{bathy}{a bathymetric feature.}
@@ -31,8 +31,6 @@ msg_start(chr, type, t0 = round(Sys.time()))
 \item{obj_name}{the name of an object}
 
 \item{chr}{a \code{character} string that tells which likelihood such as e.g., \code{"Depth"}}
-
-\item{type}{a \code{character} string that tells whehter it is likelhood or summary.}
 
 \item{t0}{current time}
 }
