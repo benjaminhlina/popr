@@ -4,6 +4,7 @@
 \alias{msg_function}
 \alias{msg_bathy}
 \alias{msg_dates}
+\alias{msg_end}
 \alias{msg_load_raster}
 \alias{msg_load_rdata}
 \alias{msg_start}
@@ -12,6 +13,8 @@
 msg_bathy(bathy)
 
 msg_dates(df)
+
+msg_end(chr, t1 = round(Sys.time()), t0)
 
 msg_load_raster(path)
 
@@ -24,15 +27,17 @@ msg_start(chr, t0 = round(Sys.time()))
 
 \item{df}{a \code{data.frame}}
 
-\item{path}{a file path. `}
+\item{chr}{a \code{character} string that tells which likelihood such as e.g., \code{"Depth"}}
+
+\item{t1}{end time}
+
+\item{t0}{current time}
+
+\item{path}{a file path.}
 
 \item{obj}{an object}
 
 \item{obj_name}{the name of an object}
-
-\item{chr}{a \code{character} string that tells which likelihood such as e.g., \code{"Depth"}}
-
-\item{t0}{current time}
 }
 \description{
 These functions produce information to the user.

@@ -52,7 +52,17 @@ msg_dates <- function(df) {
   )
 }
 
-#' @param path a file path. `
+#' @param t1 end time
+#' @name msg_function
+#' @keywords internal
+
+msg_end <- function(chr, t1 = round(Sys.time()), t0) {
+  cli::cli_alert_success(
+    "{chr} took {round(as.numeric(difftime(t1, t0, units = 'mins')), 2)} minutes"
+  )
+  invisible(t1)
+}
+#' @param path a file path.
 #'
 #' @name msg_function
 #' @keywords internal

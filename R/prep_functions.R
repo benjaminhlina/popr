@@ -29,6 +29,7 @@ prep_bathy_likdepth <- function(
   error_spatrast(bathy)
   error_logical(weighted)
   error_focal_dim(focal_dim)
+  t0 <- msg_start("bathymetric standard deviation")
 
   idx <- attr(bathy, 'idx')
   idx_na <- attr(bathy, 'idx_na')
@@ -52,7 +53,7 @@ prep_bathy_likdepth <- function(
     })
   } else {
     sd_r <- terra::focal(
-      bathy_r,
+      bathy,
       w = focal_dim,
       fun = "sd",
       na.rm = TRUE
@@ -67,6 +68,7 @@ prep_bathy_likdepth <- function(
     sdi[sdi == 0] <- fill_sd0
     sdi[is.na(sdi)] <- fill_sd0
   }
+  msg_end(chr = "Bathymetric standard deviations", t0 = t0)
 
   list(
     bathy = bathy,

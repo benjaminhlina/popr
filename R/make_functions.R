@@ -177,9 +177,6 @@ make_summary_table <- function(raw_log, time_res, bin = NULL) {
     # Clean up temporary list-columns
     dplyr::select(-valid_temps, -temp_subset, -depth_range)
 
-  t1 <- Sys.time()
-  cli::cli_alert_success(
-    "Daily summary took {round(as.numeric(difftime(t1, t0, units = 'mins')), 2)} minutes"
-  )
+  msg_end(chr = "Daily summary", t0 = t0)
   return(summary_log)
 }
