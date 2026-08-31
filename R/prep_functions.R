@@ -1,6 +1,6 @@
-#' Prepare functions
+#' Prepare Bathymetic Data
 #'
-#' These functions prepare data to then be used in Hidden Markov models
+#' This function prepared bahtymetic data to be used in the likelihood estimates.
 #'
 #' @param bathy a `spatrater` generated using `load_bathy_raster(())`
 #' @param weighted a `logical` value that determines whther or not sd is weighted. Default is `FALSE`
@@ -76,4 +76,79 @@ prep_bathy_likdepth <- function(
     focal_dim = focal_dim,
     weighted = weighted
   )
+}
+
+# ----- prep_summmary_likdepth -----
+
+#' Prepare Summary Data
+#'
+#' This function prepared summary data to be used in the likelihood estimates.
+#'
+#' @param raw_log a `data.frame` containing the raw pop-off satalitte tag log
+#' @param iniloc a `data.frame` containing the iniloc information about when the tag was deployed, mrpat, and pop dates and location.
+#' @param bin a `numeric` containing the number of seconds within an aggregation (e.g., 3600 seconds is 1 hour).
+#' @param make_plot a `logical` value that controls whether the to make the summary plot. Default is `TRUE`.
+#' @param output_dir Defaults to `NULL` and will not export plot. Please provide a `character` string containing the path deseired
+#' to save the plot.
+#'
+#' @export
+
+prep_summary_likdepth <- function(
+  raw_log,
+  iniloc,
+  bin = bin,
+  output_dir = NULL,
+  make_plot = TRUE
+) {
+  error_numeric <- function(x) invisible(NULL) # placeholder for your existing checkers
+
+  iniloc_f <- iniloc |>
+    dplyr::filter(fish %in% raw_log$fish_id)
+
+  tag_date <- iniloc_f$date[iniloc_f$event == "tag"]
+
+  pop_date <- iniloc_f$date[iniloc_f$event == "pop"]
+
+  raw_log_filter <- raw_log |>
+    dplyr::filter(date >= as.Date(tag_date), date <= as.Date(pop_date)) |>
+    dplyr::mutate(
+      depth = depth * -1
+    )
+
+  if (isTRUE(make_plot)) {
+    depth_profile <- make_summary_plot(
+      raw_log = raw_log_filter,
+      output_dir = output_dir
+    )
+  }
+
+  # ---- make median lag -----
+  median_min_lag <- raw_log_filter |>
+    dplyr::arrange(date_time) |>
+    dplyr::mutate(
+      min_lag = as.numeric(difftime(
+        date_time,
+        dplyr::lag(date_time),
+        units = "secs"
+      ))
+    ) |>
+    dplyr::pull(min_lag) |>
+    median(na.rm = TRUE)
+
+  # make summary_table
+
+  summary_table <- make_summary_table(
+    raw_log = raw_log_filter,
+    time_res = median_min_lag,
+    bin = bin
+  )
+
+  summary_list <- list(
+    raw_log_filter = raw_log_filter,
+    summary_table = summary_table,
+    depth_profile = depth_profile,
+    time_res = median_min_lag,
+    bin = bin
+  )
+  return(summary_list)
 }
