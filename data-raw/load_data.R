@@ -25,7 +25,11 @@ pdt <- pdt |>
     day = dmy(day),
     date_time = ymd_hms(paste(day, time))
   ) |>
-  relocate(date_time, .after = time)
+  relocate(date_time, .after = time) |>
+  rename(
+    fish_id = deploy_id,
+    date = day,
+  )
 
 
 glimpse(pdt)
@@ -33,12 +37,11 @@ glimpse(pdt)
 # ---- before summaries we need to trim the data based on when tagged and when popped offf ----
 # we will use baser but this could be done in dplyr or data.table
 
-pdt <- pdt[
-  pdt$day <= as.Date(iniloc_all[iniloc_all$event == 'pop', 'date']) &
-    pdt$day >= as.Date(iniloc_all[iniloc_all$event == 'tag', 'date']),
-]
-pdt
-
+# pdt <- pdt[
+#   pdt$date <= as.Date(iniloc_all[iniloc_all$event == 'pop', 'date']) &
+#     pdt$date >= as.Date(iniloc_all[iniloc_all$event == 'tag', 'date']),
+# ]
+# pdt
 
 usethis::use_data(pdt, overwrite = TRUE)
 load(
@@ -56,5 +59,11 @@ load(
 
 readr::write_rds(
   db,
+  "/Users/benhlina/Library/CloudStorage/Dropbox/Dal-Post Doc/data/Geolocation for Jena/bathy_grid/bathy.mat.gsl.ssgb.lon72.41.lat41.52.rds"
+)
+
+pdt
+
+bath <- load_bathy_raster(
   "/Users/benhlina/Library/CloudStorage/Dropbox/Dal-Post Doc/data/Geolocation for Jena/bathy_grid/bathy.mat.gsl.ssgb.lon72.41.lat41.52.rds"
 )
