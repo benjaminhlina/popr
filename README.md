@@ -2,6 +2,8 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/benjaminhlina/popr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/benjaminhlina/popr/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/benjaminhlina/popr/graph/badge.svg)](https://app.codecov.io/gh/benjaminhlina/popr)
 <!-- badges: end -->
 
 Hidden Markov models for Pop-off satalitte transmitters. 
