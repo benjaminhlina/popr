@@ -2,8 +2,11 @@
 
 export(calc_likdepth_transmit)
 export(load_bathy_raster)
+export(make_summary_plot)
+export(make_summary_table)
 export(mask_k)
 export(prep_bathy_likdepth)
+export(prep_summary_likdepth)
 import(doParallel)
 import(foreach)
 import(parallel)
