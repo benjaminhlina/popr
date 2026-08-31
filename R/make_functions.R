@@ -5,6 +5,7 @@
 #' @param raw_log a `data.frame` containing raw psat logs for an individual.
 #' @param output_dir a `character` string containing the path to save plot or table.
 #'
+#' @name make_function
 #' @export
 
 make_summary_plot <- function(raw_log, output_dir = NULL) {
@@ -27,7 +28,7 @@ make_summary_plot <- function(raw_log, output_dir = NULL) {
 
   fish_id <- unique(raw_log$fish_id)
 
-  profile <- ggplot2::ggplot(
+  depth_profile <- ggplot2::ggplot(
     pdt_long,
     ggplot2::aes(x = date_time, y = value, colour = variable)
   ) +
@@ -52,7 +53,7 @@ make_summary_plot <- function(raw_log, output_dir = NULL) {
     )
     ggplot2::ggsave(
       filename = path,
-      plot = profile,
+      plot = depth_profile,
       width = 11,
       height = 8.5,
     )
@@ -61,25 +62,26 @@ make_summary_plot <- function(raw_log, output_dir = NULL) {
       "Saved plot at the following location {.path {path}}"
     )
   }
-  return(profile)
+  invisible(depth_profile)
 }
 
 #' @param raw_log a `data.frame` containing raw psat logs for an individual.
 #' @param time_res a `numeric` that is the median time delay between depth logs, in seconds
-#' @param window a `numeric` containing the number of seconds within an aggregation (e.g., 3600 seconds is 1 hour)
+#' @param bin a `numeric` containing the number of seconds within an aggregation (e.g., 3600 seconds is 1 hour)
 #'
+#' @name make_function
 #' @export
 
-make_summary_table <- function(raw_log, time_res, window = NULL) {
+make_summary_table <- function(raw_log, time_res, bin = NULL) {
   t0 <- msg_start("summary")
 
-  if (is.null(window)) {
-    window <- 3600
+  if (is.null(bin)) {
+    bin <- 3600
   }
 
   time_res_chr <- paste(time_res, "sec")
 
-  window_time <- round(window / time_res)
+  window_time <- round(bin / time_res)
 
   # ---- first we need to create time resoluation and sequence
   # for eavery day end....
@@ -180,115 +182,3 @@ make_summary_table <- function(raw_log, time_res, window = NULL) {
   )
   return(summary_log)
 }
-
-# iniloc <- iniloc[!is.na(iniloc$date), ]
-# t0 <- Sys.time()
-# print(paste("Starting daily summary..."))
-
-# day <- seq.Date(as.Date(rg.date[1]), as.Date(rg.date[2]), by = 'day')
-
-# time_res <- 630
-
-# pdt_binned <- pdt |>
-#   group_by(date) |>
-#   reframe(
-#     time_bin = seq.POSIXt(
-#       from = min(date_time, na.rm = TRUE),
-#       to = as.POSIXct(paste(date[1], "23:59:59"), tz = "UTC"),
-#       by = time_res
-#     )
-#   )
-
-time_res <- 630
-window <- 3600
-
-
-# Helper function to avoid max() warnings on all-NA windows
-
-raw_log <- pdt
-iniloc_f <- iniloc |>
-  dplyr::filter(fish %in% raw_log$fish_id)
-#
-tag_date <- iniloc_f$date[iniloc_f$event == "tag"]
-
-pop_date <- iniloc_f$date[iniloc_f$event == "pop"]
-
-raw_log_filter <- raw_log |>
-  dplyr::filter(date >= as.Date(tag_date), date <= as.Date(pop_date))
-
-
-summary_log <- make_summary_table(
-  raw_log = raw_log_filter,
-  time_res = 600,
-  window = 3600
-)
-
-
-load(
-  "/Users/benhlina/Library/CloudStorage/Dropbox/Dal-Post Doc/data/Geolocation for Jena/summaries/sm.transmit.199637.RData"
-)
-
-dplyr::as_tibble(sm) |>
-  tail()
-
-library(dplyr)
-
-sm_tbl <- as_tibble(sm$sm)
-
-# make sure both dates are the same type (Date vs POSIXct can silently break joins)
-sm_tbl <- sm_tbl |>
-  mutate(date = as.Date(day))
-
-summary_log <- summary_log |>
-  mutate(date = as.Date(date))
-
-# dates in sm but NOT in summary_log
-in_sm_not_log <- sm_tbl |>
-  anti_join(summary_log, by = "date") |>
-  arrange(date)
-
-# dates in summary_log but NOT in sm
-in_log_not_sm <- summary_log |>
-  anti_join(sm_tbl, by = "date") |>
-  arrange(date)
-
-nrow(in_sm_not_log)
-
-nrow(in_log_not_sm)
-
-in_sm_not_log |> select(date)
-in_log_not_sm |> select(date)
-
-sm |>
-  filter(date %in% in_sm_not_log$date)
-in_sm_not_log |>
-  print(n = 3000)
-
-# t <- pdt |>
-#   group_by(date) |>
-#   summarise(
-#     min_depth = min(depth, na.rm = TRUE) * -1,
-#     max_depth = max(depth, na.rm = TRUE) * -1,
-#     min_temp = min(temperature, na.rm = TRUE),
-#     max_temp = max(temperature, na.rm = TRUE)
-#   )
-
-# sm_tbl
-
-library(ggplot2)
-summary_log <- summary_log |>
-  mutate(
-    depth_min = depth_min * -1,
-    depth_max = depth_max * -1
-  )
-
-ggplot() +
-  # geom_point(data = t, aes(x = date, y = min_depth), colour = "green") +
-  geom_point(data = sm_tbl, aes(x = date, y = Temp_max), colour = "red") +
-  geom_point(
-    data = summary_log,
-    aes(x = date, y = temp_max),
-    shape = 21,
-    size = 4,
-    fill = NA
-  )
