@@ -65,19 +65,25 @@ make_summary_plot <- function(raw_log, output_dir = NULL) {
 }
 
 #' @param raw_log a `data.frame` containing raw psat logs for an individual.
-#' @param output_dir a `character` string containing the path to save plot or table.
+#' @param time_res a `numeric` that is the median time delay between depth logs, in seconds
+#' @param window a `numeric` containing the number of seconds within an aggregation (e.g., 3600 seconds is 1 hour)
 #'
 #' @export
 
-make_summary_table <- function(raw_log, date_range, time_res, window) {
+make_summary_table <- function(raw_log, time_res, window = NULL) {
   t0 <- msg_start("summary")
+
+  if (is.null(window)) {
+    window <- 3600
+  }
+
+  time_res_chr <- paste(time_res, "sec")
+
+  window_time <- round(window / time_res)
 
   # ---- first we need to create time resoluation and sequence
   # for eavery day end....
   raw_log_res <- raw_log |>
-    dplyr::mutate(
-      time_res = paste(time_res, "sec")
-    ) |>
     dplyr::group_by(date) |>
     dplyr::mutate(
       day_end = as.POSIXct(
@@ -88,7 +94,7 @@ make_summary_table <- function(raw_log, date_range, time_res, window) {
         tz = "UTC"
       )
     ) |>
-    arrange(date_time)
+    dplyr::arrange(date_time)
 
   # ----- next we need to complete (expand.grid) on a sequency that takes the min date an time
   # for a given day
@@ -97,88 +103,76 @@ make_summary_table <- function(raw_log, date_range, time_res, window) {
       date_time = seq(
         from = min(date_time, na.rm = TRUE),
         to = day_end[1],
-        by = time_res[1]
+        by = time_res
       )
     )
 
-  summary_log <- raw_log_fill |>
-    # 1. Compute rolling metrics across regular time grid
-    mutate(
-      depth_run = slide_dbl(
+  raw_log_depth <- raw_log_fill |>
+    # ---- compute rolling metrics across regular time grid ----
+    dplyr::mutate(
+      depth_run = slider::slide_dbl(
         depth,
-        safe_max,
-        .before = window[1] - 1,
+        .safe_max,
+        .before = window_time[1] - 1,
         .after = 0,
         .complete = FALSE
       ),
-      depth_run = if_else(!is.na(depth), depth_run, NA_real_)
-    ) |>
-    # 2. Summarize depth & temperature per date
-    summarize(
+      depth_run = dplyr::if_else(
+        !is.na(depth),
+        true = depth_run,
+        false = NA
+      )
+    )
+
+  summary_log <- raw_log_depth |>
+    # ---- Summarize depth & temperature per date ------
+    dplyr::summarize(
       # Handle all-NA depth days cleanly
-      depth_min = if (all(is.na(depth))) {
-        NA_real_
-      } else {
-        min(depth_run, na.rm = TRUE)
-      },
-      depth_max = if (all(is.na(depth))) {
-        NA_real_
-      } else {
-        max(depth_run, na.rm = TRUE)
-      },
+      depth_range = list(
+        if (all(is.na(depth))) {
+          c(NA, NA)
+        } else {
+          range(depth_run, na.rm = TRUE)
+        }
+      ),
+      depth_min = depth_range[[1]][1],
+      depth_max = depth_range[[1]][2],
 
       # Extract valid temperatures within the day's depth range
-      temp_min = {
-        # Strip out padded NA values from raw daily temperatures first
-        valid_temps <- temperature[!is.na(temperature)]
-
-        if (all(is.na(depth)) || length(valid_temps) == 0) {
-          # Fallback for all-NA depth days or missing depth bounds
-          safe_range_val(valid_temps, "min")
+      # Compute shared helpers ONCE per group
+      valid_temps = list(temperature[!is.na(temperature)]),
+      #  Strip out padded NA values from raw daily temperatures first
+      temp_subset = list({
+        vt <- valid_temps[[1]]
+        if (all(is.na(depth)) || length(vt) == 0) {
+          numeric(0)
         } else {
-          # Filter temps within positive depth bounds [lower_bound, upper_bound]
           d_lower <- min(depth_min, depth_max)
           d_upper <- max(depth_min, depth_max)
-
-          sub_t <- temperature[
+          temperature[
             !is.na(temperature) &
               !is.na(depth) &
               depth >= d_lower &
               depth <= d_upper
           ]
-
-          if (length(sub_t) > 0) {
-            min(sub_t)
-          } else {
-            safe_range_val(valid_temps, "min")
-          }
         }
+      }),
+      # Extract min/max cleanly using the pre-calculated lists
+      temp_min = if (length(temp_subset[[1]]) > 0) {
+        min(temp_subset[[1]])
+      } else {
+        .safe_range_val(valid_temps[[1]], "min")
       },
-      temp_max = {
-        valid_temps <- temperature[!is.na(temperature)]
 
-        if (all(is.na(depth)) || length(valid_temps) == 0) {
-          safe_range_val(valid_temps, "max")
-        } else {
-          d_lower <- min(depth_min, depth_max)
-          d_upper <- max(depth_min, depth_max)
-
-          sub_t <- temperature[
-            !is.na(temperature) &
-              !is.na(depth) &
-              depth >= d_lower &
-              depth <= d_upper
-          ]
-
-          if (length(sub_t) > 0) {
-            max(sub_t)
-          } else {
-            safe_range_val(valid_temps, "max")
-          }
-        }
+      temp_max = if (length(temp_subset[[1]]) > 0) {
+        max(temp_subset[[1]])
+      } else {
+        .safe_range_val(valid_temps[[1]], "max")
       },
       .groups = "drop"
-    )
+    ) |>
+    # Clean up temporary list-columns
+    dplyr::select(-valid_temps, -temp_subset, -depth_range)
 
   t1 <- Sys.time()
   cli::cli_alert_success(
@@ -205,12 +199,9 @@ make_summary_table <- function(raw_log, date_range, time_res, window) {
 #     )
 #   )
 
-library(dplyr)
-
-library(slider)
-
 time_res <- 630
-window <- round(3600 / time_res)
+window <- 3600
+
 
 # Helper function to avoid max() warnings on all-NA windows
 
@@ -225,167 +216,13 @@ pop_date <- iniloc_f$date[iniloc_f$event == "pop"]
 raw_log_filter <- raw_log |>
   dplyr::filter(date >= as.Date(tag_date), date <= as.Date(pop_date))
 
-raw_log_res <- raw_log_filter |>
-  dplyr::mutate(
-    time_res = paste(time_res, "sec")
-  ) |>
-  dplyr::group_by(date) |>
-  dplyr::mutate(
-    day_end = as.POSIXct(
-      paste(
-        date,
-        "23:59:59"
-      ),
-      tz = "UTC"
-    )
-  )
 
-raw_log_fill <- raw_log_res |>
-  tidyr::complete(
-    date_time = seq(
-      from = min(date_time, na.rm = TRUE),
-      to = day_end[1],
-      by = time_res[1] # your time_res
-    )
-  )
+summary_log <- make_summary_table(
+  raw_log = raw_log_filter,
+  time_res = 600,
+  window = 3600
+)
 
-summary_log <- raw_log_fill |>
-  # 2. Compute rolling metrics across the regular time grid
-  dplyr::mutate(
-    # 1. Safe rolling max depth
-    depth_run = slider::slide_dbl(
-      depth,
-      safe_max,
-      .before = window[1] - 1,
-      .after = 0,
-      .complete = FALSE
-    ),
-    depth_run = dplyr::if_else(!is.na(depth), depth_run, NA_real_)
-  ) |>
-  dplyr::summarize(
-    depth_min = if (all(is.na(depth))) {
-      NA_real_
-    } else {
-      safe_range_val(depth_run, "min")
-    },
-    depth_max = if (all(is.na(depth))) {
-      NA_real_
-    } else {
-      safe_range_val(depth_run, "max")
-    },
-
-    # Subset temperatures matching depth range
-    temp_subset = list(temperature[
-      depth >= depth_min & depth <= depth_max & !is.na(temperature)
-    ]),
-
-    # 2. Safe temperature ranges with fallbacks
-    temp_min = {
-      sub_vals <- temp_subset[[1]]
-      if (length(sub_vals) > 0) {
-        min(sub_vals)
-      } else {
-        safe_range_val(temperature, "min")
-      }
-    },
-    temp_max = {
-      sub_vals <- temp_subset[[1]]
-      if (length(sub_vals) > 0) {
-        max(sub_vals)
-      } else {
-        safe_range_val(temperature, "max")
-      }
-    },
-    .groups = "drop"
-  ) |>
-  dplyr::select(-temp_subset)
-
-
-library(dplyr)
-library(tidyr)
-library(slider)
-
-summary_log <- raw_log_fill |>
-  # 1. Compute rolling metrics across regular time grid
-  mutate(
-    depth_run = slide_dbl(
-      depth,
-      safe_max,
-      .before = window[1] - 1,
-      .after = 0,
-      .complete = FALSE
-    ),
-    depth_run = if_else(!is.na(depth), depth_run, NA_real_)
-  ) |>
-  # 2. Summarize depth & temperature per date
-  summarize(
-    # Handle all-NA depth days cleanly
-    depth_min = if (all(is.na(depth))) {
-      NA_real_
-    } else {
-      min(depth_run, na.rm = TRUE)
-    },
-    depth_max = if (all(is.na(depth))) {
-      NA_real_
-    } else {
-      max(depth_run, na.rm = TRUE)
-    },
-
-    # Extract valid temperatures within the day's depth range
-    temp_min = {
-      # Strip out padded NA values from raw daily temperatures first
-      valid_temps <- temperature[!is.na(temperature)]
-
-      if (all(is.na(depth)) || length(valid_temps) == 0) {
-        # Fallback for all-NA depth days or missing depth bounds
-        safe_range_val(valid_temps, "min")
-      } else {
-        # Filter temps within positive depth bounds [lower_bound, upper_bound]
-        d_lower <- min(depth_min, depth_max)
-        d_upper <- max(depth_min, depth_max)
-
-        sub_t <- temperature[
-          !is.na(temperature) &
-            !is.na(depth) &
-            depth >= d_lower &
-            depth <= d_upper
-        ]
-
-        if (length(sub_t) > 0) {
-          min(sub_t)
-        } else {
-          safe_range_val(valid_temps, "min")
-        }
-      }
-    },
-    temp_max = {
-      valid_temps <- temperature[!is.na(temperature)]
-
-      if (all(is.na(depth)) || length(valid_temps) == 0) {
-        safe_range_val(valid_temps, "max")
-      } else {
-        d_lower <- min(depth_min, depth_max)
-        d_upper <- max(depth_min, depth_max)
-
-        sub_t <- temperature[
-          !is.na(temperature) &
-            !is.na(depth) &
-            depth >= d_lower &
-            depth <= d_upper
-        ]
-
-        if (length(sub_t) > 0) {
-          max(sub_t)
-        } else {
-          safe_range_val(valid_temps, "max")
-        }
-      }
-    },
-    .groups = "drop"
-  )
-
-summary_log |>
-  tail()
 
 load(
   "/Users/benhlina/Library/CloudStorage/Dropbox/Dal-Post Doc/data/Geolocation for Jena/summaries/sm.transmit.199637.RData"
@@ -427,16 +264,16 @@ sm |>
 in_sm_not_log |>
   print(n = 3000)
 
-t <- pdt |>
-  group_by(date) |>
-  summarise(
-    min_depth = min(depth, na.rm = TRUE) * -1,
-    max_depth = max(depth, na.rm = TRUE) * -1,
-    min_temp = min(temperature, na.rm = TRUE),
-    max_temp = max(temperature, na.rm = TRUE)
-  )
+# t <- pdt |>
+#   group_by(date) |>
+#   summarise(
+#     min_depth = min(depth, na.rm = TRUE) * -1,
+#     max_depth = max(depth, na.rm = TRUE) * -1,
+#     min_temp = min(temperature, na.rm = TRUE),
+#     max_temp = max(temperature, na.rm = TRUE)
+#   )
 
-sm_tbl
+# sm_tbl
 
 library(ggplot2)
 summary_log <- summary_log |>
