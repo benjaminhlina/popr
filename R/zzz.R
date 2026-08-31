@@ -1,0 +1,29 @@
+globalVariables(
+  c(
+    "bathy_r",
+    "daily.sd.depth",
+    "date_time",
+    "dateVec",
+    "day_end",
+    "depth",
+    "depth_max",
+    "depth_min",
+    "depth_range",
+    "depth_run",
+    "df",
+    "fish",
+    "indNA",
+    "inds",
+    "median",
+    "min_lag",
+    "pdt.i",
+    "sdi",
+    "t0",
+    "temperature",
+    "temp_subset",
+    "valid_temps",
+    "value",
+    "variable",
+    "zbi"
+  )
+)

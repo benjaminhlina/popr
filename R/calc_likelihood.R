@@ -6,9 +6,6 @@
 #' @param pdt a `data.frame` containing psat depth data for a single transmitter
 #' @param bathy a the file path to a bathymetric grid  "/project/bathy_grid/bathy.mat.gsl.ssgb.lon72.49.lat41.52.RData"
 #' @param ncores a `numeric` that dictates the number of cores used.
-#'  description
-#' @param weighted a `logical` value that dictates whether the model weights predictions
-#' @param focal_dim a `numeric` do not know what this does
 #' @param daily_sd_depth a numeric value
 #'
 #' @import parallel

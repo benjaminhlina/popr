@@ -3,7 +3,7 @@ Title: Provides Hidden Markoven Models for psat data
 Version: 0.1.0
 Authors@R: 
     person("Benjamin L.", "Hlina", , "benjamin.hlina@gmail.com", role = c("aut", "cre"))
-Description: Provides ability to conduct Hidden Markoven Models for psat data 
+Description: Provides ability to conduct Hidden Markoven Models for psat data for marine fishes and megafauna. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -14,8 +14,15 @@ LazyData: true
 Imports: 
     cli,
     doParallel,
+    dplyr,
     foreach,
-    parallel
+    ggplot2,
+    parallel,
+    rlang, 
+    scales, 
+    slider, 
+    terra, 
+    tidyr
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

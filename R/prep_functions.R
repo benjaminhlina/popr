@@ -142,7 +142,7 @@ prep_summary_likdepth <- function(
       ))
     ) |>
     dplyr::pull(min_lag) |>
-    median(na.rm = TRUE)
+    stats::median(na.rm = TRUE)
 
   # make summary_table
 
