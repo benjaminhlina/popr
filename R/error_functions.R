@@ -2,7 +2,6 @@
 #'
 #' These functions produce error message displayed to the user.
 #'
-#'
 #' @param df a `data.frame`
 #' @param arg_name The name of the argument
 #'

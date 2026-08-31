@@ -96,11 +96,16 @@ prep_bathy_likdepth <- function(
 prep_summary_likdepth <- function(
   raw_log,
   iniloc,
-  bin = bin,
+  bin,
   output_dir = NULL,
   make_plot = TRUE
 ) {
-  error_numeric <- function(x) invisible(NULL) # placeholder for your existing checkers
+  rlang::check_required(raw_log)
+  rlang::check_required(iniloc)
+  rlang::check_required(bin)
+
+  error_logical(make_plot)
+  error_numeric(bin)
 
   iniloc_f <- iniloc |>
     dplyr::filter(fish %in% raw_log$fish_id)
