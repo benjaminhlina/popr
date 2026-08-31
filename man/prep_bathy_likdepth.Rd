@@ -2,7 +2,7 @@
 % Please edit documentation in R/prep_functions.R
 \name{prep_bathy_likdepth}
 \alias{prep_bathy_likdepth}
-\title{Prepare functions}
+\title{Prepare Bathymetic Data}
 \usage{
 prep_bathy_likdepth(bathy, weighted = FALSE, focal_dim = 9, ctd.dir = NULL)
 }
@@ -16,7 +16,7 @@ prep_bathy_likdepth(bathy, weighted = FALSE, focal_dim = 9, ctd.dir = NULL)
 \item{ctd.dir}{only required when \code{weighted = TRUE}. The path to ctd.}
 }
 \description{
-These functions prepare data to then be used in Hidden Markov models
+This function prepared bahtymetic data to be used in the likelihood estimates.
 }
 \details{
 window used (i.e., \code{focal_dim}) must have odd dimensions. If you need even sides,
