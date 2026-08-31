@@ -28,9 +28,8 @@ calc_likdepth_transmit <- function(
   error_spatrast(bathy)
   error_numeric(ncores)
 
-  options(warn = 0)
   # t0 <- round(Sys.time())
-  msg_start(x = "Depth")
+  msg_start(chr = "depth (m) likelihood")
 
   msg_dates(df = pdt)
 
@@ -38,8 +37,8 @@ calc_likdepth_transmit <- function(
   # start of heavy daily loop
   # here is the place to implement parallelisation
   #--------------------------
-  #  t1.=Sys.time()
-  print(paste("Starting iterations through deployment period ", "..."))
+
+  cli::cli_alert("Starting iterations through deployment period....")
 
   # declare cluster parrallel
   cl <- parallel::makeCluster(ncores)
@@ -49,8 +48,8 @@ calc_likdepth_transmit <- function(
       # i = 2
       # i=187
       # i=341
-      time <- as.Date(ac(dateVec[i])) #as.Date(udates[i])
-      pdt.i <- pdt[ac(pdt$day) == ac(time), ]
+      # time <- as.Date(ac(dateVec[i])) #as.Date(udates[i])
+      # pdt.i <- pdt[ac(pdt$day) == ac(time), ]
       # range fish depth considered to be the bottom
       # error tag +-1m +-1% depth
       if (is.na(pdt.i$Depth_max) | is.infinite(pdt.i$Depth_max)) {
