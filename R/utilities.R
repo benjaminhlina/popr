@@ -19,6 +19,34 @@ an. <- function(x) {
   return(as.numeric(x))
 }
 
+#' Safe base functions
+#'
+#' These functions check if x is `NA` then
+#' return a stat (e.g, range, min, max)
+#'
+#' @param x a `numerical` vector
+#'
+#' @name safe_functions
+#' @keywords internal
+.safe_max <- function(x) {
+  if (all(is.na(x))) {
+    return(NA_real_)
+  }
+  max(x, na.rm = TRUE)
+}
+
+#' @param type a `character` determining whether `min()` or `max()` is used
+#'
+#' @name safe_functions
+#' @keywords internal
+.safe_range_val <- function(x, type = c("min", "max")) {
+  x <- x[!is.na(x)]
+  if (length(x) == 0) {
+    return(NA_real_)
+  }
+  if (type == "min") min(x) else max(x)
+}
+
 
 #' Integrate dnorm
 #'

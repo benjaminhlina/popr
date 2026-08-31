@@ -81,6 +81,6 @@ msg_load_rdata <- function(obj, obj_name) {
 #' @keywords internal
 
 msg_start <- function(chr, t0 = round(Sys.time())) {
-  cli::cli_alert_info("Starting {x} likelihood calculation at {.val {t0}}")
+  cli::cli_alert_info("Starting {chr} calculations at {.val {t0}}")
   invisible(t0)
 }
