@@ -19,12 +19,12 @@
 #'
 #' @format `data.frame` containing 19,462 rows and 17 variables
 #'  \describe{
-#'    \item{deploy_id}{The id of a given tagged fish}
+#'    \item{fish_id}{The id of a given tagged fish}
 #'    \item{ptt}{The id of a psat tag}
 #'    \item{depth_sensor}{The type of sensor e.g., (`0.5`)}
 #'    \item{source}{Transmission source}
 #'    \item{instr}{The intstrument type}
-#'    \item{day}{The date recored}
+#'    \item{date}{The date recored}
 #'    \item{time}{The tiem recorded}
 #'    \item{date_time}{The date timestamp}
 #'    \item{location_quality}{The quality of the location}
