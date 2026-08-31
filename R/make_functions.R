@@ -42,7 +42,8 @@ make_summary_plot <- function(raw_log, output_dir = NULL) {
     ggplot2::theme(
       axis.title.y = ggplot2::element_blank(),
       legend.position = "none",
-      strip.background = ggplot2::element_blank()
+      strip.background = ggplot2::element_blank(),
+      plot.title = ggplot2::element_text(hjust = 0.5)
     ) +
     ggplot2::labs(x = "Date (mm/yy)", title = fish_id)
 
