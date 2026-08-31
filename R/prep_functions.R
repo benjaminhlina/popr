@@ -120,6 +120,8 @@ prep_summary_likdepth <- function(
       raw_log = raw_log_filter,
       output_dir = output_dir
     )
+  } else {
+    depth_profile <- NULL
   }
 
   # ---- make median lag -----
