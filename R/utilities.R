@@ -1,22 +1,22 @@
-#' Class transformers
+#' Convert functions
 #'
-#' @param x a `vector` description
+#' Convert an object of one class to another (e.g., `SpatRaster` to `matrix`
 #'
-#' @name class_transformers
+#' @param x a `SpatRaster` object
+#'
+#' @name convert_transformers
 #' @keywords internal
 
-ac <- function(x) {
-  return(as.character(x))
-}
-#' @name class_transformers
-#' @keywords internal
-an <- function(x) {
-  return(as.numeric(ac(x)))
-}
-#' @name class_transformers
-#' @keywords internal
-an. <- function(x) {
-  return(as.numeric(x))
+.convert_spr_to_vec <- function(x) {
+  error_spatrast(x)
+  # if (inherits(x, "SpatRaster")) {
+  convert <- terra::as.matrix(x, wide = TRUE) |>
+    as.vector()
+  # wide = TRUE returns matrix matching spatial grid [rows, cols]
+  # as.vector() on matrix converts it in standard column-major order
+  return(convert)
+  # }
+  # return(as.vector(x))
 }
 
 #' Safe base functions
