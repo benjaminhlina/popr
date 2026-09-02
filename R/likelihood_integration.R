@@ -17,18 +17,37 @@ likint3 <- function(w, wsd, minT, maxT) {
   w
 }
 
-#. sub and .corr are the same function
-
+#' Integrate N(mean, sd) between the minimum and maxium depth for a subset of cells
+#'
+#' Vectorized replacement for row-wise stats::integrate(dnorm, ...) --
+#' exact, not an approximation: integral of dnorm from low to high is
+#' pnorm(high) - pnorm(low) by definition of the CDF.
+#'
 #' @param w a `matrix`/`data.frame` with columns: mean, sd, lower bound, upper bound
-#' @param widx a logical vector indicating which rows of `w` to integrate
+#' @param widx a logical vector indicating which rows of `w` to integrate - an index
 #'
 #' @details `likint3_matrix` use to be called `linkint3.sub`
 #' @name likelihood_integration
 #' @keywords internal
 #'
 likint3_matrix <- function(w, widx) {
-  wdf <- w[widx, ]
-  wint <- .integrate_dnorm_rows(wdf[, 1], wdf[, 2], wdf[, 3], wdf[, 4])
+  wdf <- w[widx, , drop = FALSE]
+
+  bad <- wdf[, 3] > wdf[, 4]
+
+  if (any(bad, na.rm = TRUE)) {
+    cli::cli_abort(c(
+      "x" = "{sum(bad, na.rm = TRUE)} row{?s} have {.code low > high} in depth integration bounds.",
+      "i" = "Check for reversed or malformed {.field Depth_min}/{.field Depth_max} upstream.",
+      "i" = "First offending row (of {widx}): {.val {which(bad)[1]}}"
+    ))
+  }
+  wint <- .integrate_dnorm_rows(
+    mean = wdf[, 1],
+    sd = wdf[, 2],
+    lower = wdf[, 3],
+    upper = wdf[, 4]
+  )
   w[, 1] <- 0
   w[widx, 1] <- wint
   w[, 1]
