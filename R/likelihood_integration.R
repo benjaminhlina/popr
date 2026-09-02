@@ -27,7 +27,6 @@ likint3 <- function(w, wsd, minT, maxT) {
 #' @param widx a logical vector indicating which rows of `w` to integrate - an index
 #'
 #' @details `likint3_matrix` use to be called `linkint3.sub`
-#' @name likelihood_integration
 #' @keywords internal
 #'
 likint3_matrix <- function(w, widx) {
