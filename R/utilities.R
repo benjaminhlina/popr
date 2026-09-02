@@ -59,15 +59,18 @@ an. <- function(x) {
 #' @keywords internal
 
 .integrate_dnorm_rows <- function(mean, sd, lower, upper) {
-  mapply(
-    function(m, s, lo, hi) {
-      stats::integrate(stats::dnorm, lo, hi, mean = m, sd = s)$value
-    },
-    mean,
-    sd,
-    lower,
-    upper
-  )
+  # mapply(
+  #   function(m, s, lo, hi) {
+  #     stats::integrate(stats::dnorm, lo, hi, mean = m, sd = s)$value
+  #   },
+  #   mean,
+  #   sd,
+  #   lower,
+  #   upper
+  # )
+  integrated <- stats::pnorm(q = upper, mean = mean, sd = sd) -
+    stats::pnorm(q = lower, mean = mean, sd = sd)
+  return(integrated)
 }
 
 #' Index functions
