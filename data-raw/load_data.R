@@ -67,3 +67,11 @@ pdt
 bath <- load_bathy_raster(
   "/Users/benhlina/Library/CloudStorage/Dropbox/Dal-Post Doc/data/Geolocation for Jena/bathy_grid/bathy.mat.gsl.ssgb.lon72.41.lat41.52.rds"
 )
+
+
+bathy_matrix <- readRDS(
+  "/Users/benhlina/Library/CloudStorage/Dropbox/Dal-Post Doc/data/Geolocation for Jena/bathy_grid/bathy.mat.gsl.ssgb.lon72.41.lat41.52.rds"
+)
+
+
+usethis::use_data(bathy_matrix, overwrite = TRUE)
