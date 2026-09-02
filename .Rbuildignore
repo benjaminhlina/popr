@@ -1,6 +1,8 @@
-^hmmr\.Rproj$
+^popr\.Rproj$
 ^\.Rproj\.user$
 ^[.]?air[.]toml$
 ^\.vscode$
 ^LICENSE\.md$
 ^\.github$
+^popr/data-raw$
+^data-raw$
