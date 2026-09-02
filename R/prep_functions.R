@@ -61,12 +61,14 @@ prep_bathy_likdepth <- function(
     sdi <- terra::as.matrix(sd_r, wide = TRUE)
 
     ssd <- as.vector(sdi)
-    fill_sd0 <- stats::quantile(ssd[ssd != 0], probs = .01, na.rm = TRUE)
+    fill_sd0 <- stats::quantile(ssd[ssd != 0], probs = 0.01, na.rm = TRUE)
     if (is.na(fill_sd0)) {
       fill_sd0 <- 1e-3
     }
     sdi[sdi == 0] <- fill_sd0
     sdi[is.na(sdi)] <- fill_sd0
+
+    sdi <- terra::rast(sdi)
   }
   msg_end(chr = "Bathymetric standard deviations", t0 = t0)
 
