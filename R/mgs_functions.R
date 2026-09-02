@@ -43,12 +43,13 @@ msg_bathy <- function(bathy) {
 }
 
 #' @param df a `data.frame`
+#' @param n_days a `numerical` value
 #'
 #' @name msg_function
 #' @keywords internal
-msg_dates <- function(df) {
+msg_dates <- function(df, n_days) {
   cli::cli_alert_info(
-    "Generating profile likelihood for {.val {min(df$day)}} through {.val {max(df$day)}}"
+    "Generating depth profile likelihood for {.val {min(df$date)}} through {.val {max(df$date)}} which is a total of {n_days} days."
   )
 }
 
