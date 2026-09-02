@@ -57,14 +57,13 @@ msg_dates <- function(df, n_days) {
 #' @name msg_function
 #' @keywords internal
 
-msg_end <- function(chr, t1 = round(Sys.time()), t0) {
+msg_end <- function(chr, t0, t1 = round(Sys.time())) {
   cli::cli_alert_success(
     "{chr} took {round(as.numeric(difftime(t1, t0, units = 'mins')), 2)} minutes"
   )
   invisible(t1)
 }
 #' @param path a file path.
-#'
 #' @name msg_function
 #' @keywords internal
 
@@ -76,7 +75,6 @@ msg_load_raster <- function(path) {
 
 #' @param obj an object
 #' @param obj_name the name of an object
-#'
 #' @name msg_function
 #' @keywords internal
 msg_load_rdata <- function(obj, obj_name) {
@@ -87,7 +85,6 @@ msg_load_rdata <- function(obj, obj_name) {
 
 #' @param chr a `character` string that tells which likelihood such as e.g., `"Depth"`
 #' @param t0 current time
-#'
 #' @name msg_function
 #' @keywords internal
 

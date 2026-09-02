@@ -13,11 +13,9 @@ Depends:
 LazyData: true
 Imports: 
     cli,
-    doParallel,
     dplyr,
-    foreach,
     ggplot2,
-    parallel,
+    purrr,
     rlang, 
     scales, 
     slider, 

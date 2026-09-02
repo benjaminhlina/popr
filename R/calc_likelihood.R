@@ -3,13 +3,12 @@
 #' These are functions that will calculated the likelihood
 #' of movement based on additonal parameters such as depth
 #'
-#' @param summary_log_i data.frame of a single date's rows (as produced by
-#'   splitting `summary_log` on `date` upstream); may be 0-row or have
-#'   NA/Inf `depth_max`
-#' @param preped_bathy list from `prep_bathy_likdepth()`: `idx`, `idx_na`, `bathy`, `sdi`
+#' @param summary_log_i `data.frame` of a single date's rows (as produced by splitting `summary_log` on `date` upstream); may be 0-row or have NA/Inf `depth_max`
+#' @param zbi a `vector` containing bathymetric values for an area `idx`, `idx_na`, `bathy`, `sdi`
+#' @param sdi_dsd a `vector` containing standard deviaation values for an area + the daily_sd_depth
+#' @param idx a `vector` containing the index of valid depth values
+#' @param idx_na a `vector` containing the index of non-valid depth value/where depth is `NA`
 #' @param dims integer vector length 2, c(nrow, ncol) of the original bathymetry grid
-
-#' @param daily_sd_depth numeric
 #' @param time character/Date, used only for error messages
 #' @keywords internal
 calc_daily_likdepth <- function(

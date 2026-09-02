@@ -14,7 +14,7 @@ msg_bathy(bathy)
 
 msg_dates(df, n_days)
 
-msg_end(chr, t1 = round(Sys.time()), t0)
+msg_end(chr, t0, t1 = round(Sys.time()))
 
 msg_load_raster(path)
 
@@ -31,9 +31,9 @@ msg_start(chr, t0 = round(Sys.time()))
 
 \item{chr}{a \code{character} string that tells which likelihood such as e.g., \code{"Depth"}}
 
-\item{t1}{end time}
-
 \item{t0}{current time}
+
+\item{t1}{end time}
 
 \item{path}{a file path.}
 

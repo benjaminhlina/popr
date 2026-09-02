@@ -24,19 +24,15 @@ likedepth_transmit <- calc_likdepth_transmit(
   daily_sd_depth = 0.57
 )
 
+# ----- plot the first couple ----
 ldt_dims <- dim(likedepth_transmit)
 
 days <- seq(1, 2, by = 1)
 
+# this just confirms that it its working how it is intended will be making tests
 
 days |>
   purrr::walk(
     ~ fields::image.plot(likedepth_transmit[,, .x]),
     .progress = TRUE
   )
-
-
-t <- bathy |>
-  .convert_spr_to_vec()
-
-.valid_idx(bathy, na = TRUE)

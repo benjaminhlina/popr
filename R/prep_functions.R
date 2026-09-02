@@ -5,7 +5,7 @@
 #' @param bathy a `spatrater` generated using `load_bathy_raster(())`
 #' @param weighted a `logical` value that determines whther or not sd is weighted. Default is `FALSE`
 #' @param focal_dim a `numerical` value that is odd. See details below.
-#' @param ctd.dir only required when `weighted = TRUE`. The path to ctd.
+#' @param ctd_dir only required when `weighted = TRUE`. The path to ctd.
 #'
 #' @details  window used (i.e., `focal_dim`) must have odd dimensions. If you need even sides,
 #' you can use a matrix and add a column or row of `NA`'s to mask out values.
@@ -24,7 +24,7 @@ prep_bathy_likdepth <- function(
   bathy, # SpatRaster, RasterLayer, matrix, or path to .RData/.tif
   weighted = FALSE,
   focal_dim = 9,
-  ctd.dir = NULL # only required when weighted = TRUE
+  ctd_dir = NULL # only required when weighted = TRUE
 ) {
   error_spatrast(bathy)
   error_logical(weighted)

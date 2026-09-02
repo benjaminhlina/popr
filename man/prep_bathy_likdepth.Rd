@@ -4,7 +4,7 @@
 \alias{prep_bathy_likdepth}
 \title{Prepare Bathymetic Data}
 \usage{
-prep_bathy_likdepth(bathy, weighted = FALSE, focal_dim = 9, ctd.dir = NULL)
+prep_bathy_likdepth(bathy, weighted = FALSE, focal_dim = 9, ctd_dir = NULL)
 }
 \arguments{
 \item{bathy}{a \code{spatrater} generated using \verb{load_bathy_raster(())}}
@@ -13,7 +13,7 @@ prep_bathy_likdepth(bathy, weighted = FALSE, focal_dim = 9, ctd.dir = NULL)
 
 \item{focal_dim}{a \code{numerical} value that is odd. See details below.}
 
-\item{ctd.dir}{only required when \code{weighted = TRUE}. The path to ctd.}
+\item{ctd_dir}{only required when \code{weighted = TRUE}. The path to ctd.}
 }
 \description{
 This function prepared bahtymetic data to be used in the likelihood estimates.

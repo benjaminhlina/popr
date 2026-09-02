@@ -7,17 +7,19 @@
 calc_daily_likdepth(summary_log_i, zbi, sdi_dsd, idx, idx_na, dims, time)
 }
 \arguments{
-\item{summary_log_i}{data.frame of a single date's rows (as produced by
-splitting \code{summary_log} on \code{date} upstream); may be 0-row or have
-NA/Inf \code{depth_max}}
+\item{summary_log_i}{\code{data.frame} of a single date's rows (as produced by splitting \code{summary_log} on \code{date} upstream); may be 0-row or have NA/Inf \code{depth_max}}
+
+\item{zbi}{a \code{vector} containing bathymetric values for an area \code{idx}, \code{idx_na}, \code{bathy}, \code{sdi}}
+
+\item{sdi_dsd}{a \code{vector} containing standard deviaation values for an area + the daily_sd_depth}
+
+\item{idx}{a \code{vector} containing the index of valid depth values}
+
+\item{idx_na}{a \code{vector} containing the index of non-valid depth value/where depth is \code{NA}}
 
 \item{dims}{integer vector length 2, c(nrow, ncol) of the original bathymetry grid}
 
 \item{time}{character/Date, used only for error messages}
-
-\item{preped_bathy}{list from \code{prep_bathy_likdepth()}: \code{idx}, \code{idx_na}, \code{bathy}, \code{sdi}}
-
-\item{daily_sd_depth}{numeric}
 }
 \description{
 These are functions that will calculated the likelihood

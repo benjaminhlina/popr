@@ -1,7 +1,7 @@
 #' Likelihood integration functions
 #'
-#' @param w a `vector` description
-#' @param wsd a `vector` containging the standard deviation
+#' @param w a `vector` containing the mean of an area
+#' @param wsd a `vector` containing the standard deviation
 #' @param minT a `vector` containing the minmum temperature
 #' @param maxT a `vector` containing the maximum temperature
 #'
@@ -27,6 +27,7 @@ likint3 <- function(w, wsd, minT, maxT) {
 #' @param widx a logical vector indicating which rows of `w` to integrate - an index
 #'
 #' @details `likint3_matrix` use to be called `linkint3.sub`
+#' @name  likelihood_integration
 #' @keywords internal
 #'
 likint3_matrix <- function(w, widx) {

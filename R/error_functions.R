@@ -61,8 +61,6 @@ error_focal_dim <- function(obj, arg_name = NULL) {
     }
   }
 }
-# else if (!(inherits(obj, "matrix"))) {}
-# }
 
 #' @name error_functions
 #' @keywords internal
