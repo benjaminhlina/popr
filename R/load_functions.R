@@ -17,6 +17,7 @@ load_bathy_raster <- function(bathy) {
 
   if (inherits(bathy, "SpatRaster")) {
     attr(bathy, "idx") <- .valid_idx(bathy)
+    attr(bathy, "idx_na") <- .valid_idx(bathy, na = TRUE)
     return(bathy)
   }
 
@@ -24,6 +25,7 @@ load_bathy_raster <- function(bathy) {
   if (inherits(bathy, "RasterLayer") || is.matrix(bathy)) {
     bathy <- terra::rast(bathy)
     attr(bathy, "idx") <- .valid_idx(bathy)
+    attr(bathy, "idx_na") <- .valid_idx(bathy, na = TRUE)
     return(bathy)
   }
 
@@ -58,7 +60,7 @@ load_bathy_raster <- function(bathy) {
     }
   )
   attr(out, "idx") <- .valid_idx(out)
-  attr(out, "idx_na") <- .valid_idx_na(out)
+  attr(out, "idx_na") <- .valid_idx(out, na = TRUE)
   return(out)
 
   error_raster(raster = bathy)
