@@ -2,20 +2,18 @@
 % Please edit documentation in R/calc_likelihood.R
 \name{calc_likdepth_transmit}
 \alias{calc_likdepth_transmit}
-\title{Calculate Likelihood Functions}
+\title{Calculate Likelihood Depth Transmitted}
 \usage{
-calc_likdepth_transmit(pdt, bathy = NULL, ncores = 4, daily_sd_depth = 0.57)
+calc_likdepth_transmit(preped_log, preped_bathy, daily_sd_depth = 0.57)
 }
 \arguments{
-\item{pdt}{a \code{data.frame} containing psat depth data for a single transmitter}
+\item{preped_log}{a \code{list} containing summary objects crated by \code{prep_summary_likdepth()}.}
 
-\item{bathy}{a the file path to a bathymetric grid  "/project/bathy_grid/bathy.mat.gsl.ssgb.lon72.49.lat41.52.RData"}
-
-\item{ncores}{a \code{numeric} that dictates the number of cores used.}
+\item{preped_bathy}{a \code{list} containinging objects created by \code{prep_bathy_likdepth()}.}
 
 \item{daily_sd_depth}{a numeric value}
 }
 \description{
-These are functions that will calculated the likelihood
-of movement based on additonal parameters such as depth
+These are functions that will calculated the likelihood of depth occupancy based on
+depth values transmitted and bathymetry
 }
