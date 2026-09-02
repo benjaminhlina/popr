@@ -72,10 +72,9 @@
 #' Provides an index number.
 #'
 #' @param x an object to get a index
-#' @param na description
+#' @param na a `TRUE/FALSE` that controls whether index locations that are `NA` are returned. Default is `FALSE`.`
 #' @name index_functions
 #' @keywords internal
-#'
 
 .valid_idx <- function(x, na = FALSE) {
   vals <- .convert_spr_to_vec(x)

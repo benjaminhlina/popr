@@ -3,15 +3,14 @@
 \name{index_functions}
 \alias{index_functions}
 \alias{.valid_idx}
-\alias{.valid_idx_na}
 \title{Index functions}
 \usage{
-.valid_idx(x)
-
-.valid_idx_na(x)
+.valid_idx(x, na = FALSE)
 }
 \arguments{
 \item{x}{an object to get a index}
+
+\item{na}{a \code{TRUE/FALSE} that controls whether index locations that are \code{NA} are returned. Default is \code{FALSE}.`}
 }
 \description{
 Provides an index number.
