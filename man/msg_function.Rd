@@ -12,7 +12,7 @@
 \usage{
 msg_bathy(bathy)
 
-msg_dates(df)
+msg_dates(df, n_days)
 
 msg_end(chr, t1 = round(Sys.time()), t0)
 
@@ -26,6 +26,8 @@ msg_start(chr, t0 = round(Sys.time()))
 \item{bathy}{a bathymetric feature.}
 
 \item{df}{a \code{data.frame}}
+
+\item{n_days}{a \code{numerical} value}
 
 \item{chr}{a \code{character} string that tells which likelihood such as e.g., \code{"Depth"}}
 

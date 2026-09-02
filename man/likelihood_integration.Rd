@@ -3,28 +3,20 @@
 \name{likelihood_integration}
 \alias{likelihood_integration}
 \alias{likint3}
-\alias{likint3_matrix}
 \title{Likelihood integration functions}
 \usage{
 likint3(w, wsd, minT, maxT)
-
-likint3_matrix(w, widx)
 }
 \arguments{
-\item{w}{a \code{matrix}/\code{data.frame} with columns: mean, sd, lower bound, upper bound}
+\item{w}{a \code{vector} description}
 
 \item{wsd}{a \code{vector} containging the standard deviation}
 
 \item{minT}{a \code{vector} containing the minmum temperature}
 
 \item{maxT}{a \code{vector} containing the maximum temperature}
-
-\item{widx}{a logical vector indicating which rows of \code{w} to integrate}
 }
 \description{
 Likelihood integration functions
-}
-\details{
-\code{likint3_matrix} use to be called \code{linkint3.sub}
 }
 \keyword{internal}
