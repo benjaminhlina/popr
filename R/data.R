@@ -1,3 +1,11 @@
+#' Example Bathymetric data
+#'
+#' An example of bathymetric data as a `matrix`
+#'
+#' @format a `matrix` containing `numerical` values of bathymetry with deminsion of 1:603 and 1:1151.
+#'
+"bathy_matrix"
+
 #' Iniloc data
 #'
 #' An example of psat transmitter info as a `data.frame`.
