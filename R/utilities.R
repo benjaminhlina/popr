@@ -72,22 +72,19 @@
 #' Provides an index number.
 #'
 #' @param x an object to get a index
+#' @param na description
 #' @name index_functions
 #' @keywords internal
+#'
 
-.valid_idx <- function(x) {
-  vals <- if (inherits(x, "SpatRaster")) terra::values(x)[, 1] else as.vector(x)
-  idx_na <- which(is.na(vals))
-  idx <- seq_along(vals)
-  idx[!idx %in% idx_na]
+.valid_idx <- function(x, na = FALSE) {
+  vals <- .convert_spr_to_vec(x)
+
+  if (isFALSE(na)) {
+    idx <- which(!is.na(vals))
+  } else {
+    idx <- which(is.na(vals))
+  }
+
   return(idx)
-}
-
-#' @name index_functions
-#' @keywords internal
-
-.valid_idx_na <- function(x) {
-  vals <- if (inherits(x, "SpatRaster")) terra::values(x)[, 1] else as.vector(x)
-  idx_na <- which(is.na(vals))
-  return(idx_na)
 }
