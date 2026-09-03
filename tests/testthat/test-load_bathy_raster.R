@@ -50,9 +50,9 @@ test_that("RasterLayer input is converted to SpatRaster with idx attributes", {
     .valid_idx = function(bathy, na = FALSE) if (na) "IDX_NA" else "IDX"
   )
 
-  rl <- raster::raster(matrix(1:25, nrow = 5))
+  # rl <- raster::raster(matrix(1:25, nrow = 5))
 
-  out <- suppressMessages(load_bathy_raster(rl))
+  out <- suppressMessages(load_bathy_raster(bathy_raster))
 
   expect_s4_class(out, "SpatRaster")
   expect_identical(attr(out, "idx"), "IDX")
