@@ -20,7 +20,7 @@ error_empty_file(path)
 
 error_focal_dim(obj, arg_name = NULL)
 
-error_load(path)
+error_load(path, e)
 
 error_logical(vec, arg_name = NULL)
 
@@ -42,6 +42,8 @@ error_spatrast(spatrast, arg_name = NULL)
 \item{path}{The file path to a file.}
 
 \item{obj}{an object either \code{vector} or \code{matrix}}
+
+\item{e}{the condition object caught by \code{tryCatch()}}
 
 \item{vec}{a \code{vector} to check if numeric}
 

@@ -47,6 +47,9 @@ load_bathy_raster <- function(bathy) {
     if (grepl("\\.rds$", bathy, ignore.case = TRUE)) {
       obj <- readRDS(bathy)
     }
+    if (grepl("\\.tif$", bathy, ignore.case = TRUE)) {
+      obj <- terra::rast(bathy)
+    }
 
     return(load_bathy_raster(obj))
   }
@@ -56,12 +59,12 @@ load_bathy_raster <- function(bathy) {
   out <- tryCatch(
     terra::rast(bathy),
     error = function(e) {
-      error_load(path = bathy)
+      error_load(path = bathy, e = e)
     }
   )
   attr(out, "idx") <- .valid_idx(out)
   attr(out, "idx_na") <- .valid_idx(out, na = TRUE)
-  return(out)
-
   error_raster(raster = bathy)
+
+  return(out)
 }

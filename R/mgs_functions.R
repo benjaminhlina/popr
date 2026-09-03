@@ -32,7 +32,8 @@ msg_bathy <- function(bathy) {
   if (is.character(bathy)) {
     if (
       grepl("\\.RData$", bathy, ignore.case = TRUE) ||
-        grepl("\\.rds$", bathy, ignore.case = TRUE)
+        grepl("\\.rds$", bathy, ignore.case = TRUE) ||
+        grepl("\\.tif$", bathy, ignore.case = TRUE)
     ) {
       cli::cli_inform(
         "{.arg bathy} detected as a file path: {.file {bathy}}"

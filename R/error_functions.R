@@ -62,14 +62,15 @@ error_focal_dim <- function(obj, arg_name = NULL) {
   }
 }
 
+#' @param e the condition object caught by `tryCatch()`
 #' @name error_functions
 #' @keywords internal
-error_load <- function(path) {
+error_load <- function(path, e) {
   cli::cli_abort(
     c(
       "Failed to read {.arg path} as a raster.",
       "x" = "{.file {path}} could not be loaded by {.fn terra::rast}.",
-      "i" = "{.arg path} was type {.cls character}.",
+      "i" = "{.arg path} was type {.cls {class(path)}}.",
       "i" = "Original error: {conditionMessage(e)}"
     ),
     class = "bathy_rast_read_failed"
@@ -167,7 +168,7 @@ error_raster <- function(raster) {
 
 error_spatrast <- function(spatrast, arg_name = NULL) {
   if (is.null(arg_name)) {
-    arg_name <- rlang::as_label(rlang::enexpr(df))
+    arg_name <- rlang::as_label(rlang::enexpr(spatrast))
   }
 
   if (!(inherits(spatrast, "SpatRaster"))) {
